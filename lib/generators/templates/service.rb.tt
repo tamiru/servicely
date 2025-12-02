@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+<% module_namespacing do -%>
+class <%= class_name %>Service
+  def initialize(**args)
+    @args = args
+  end
+
+  def call
+    # TODO: implement logic
+  end
+
+  private
+
+  attr_reader :args
+end
+<% end -%>

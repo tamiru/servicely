@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
   spec.summary     = "A Rails generator that creates clean, structured Service Objects for Rails apps and engines."
   spec.description = "Servicely provides a simple, consistent Service Object generator for Ruby on Rails applications and Rails Engines. It helps developers create maintainable service classes with a clean structure, namespacing support, and engine-awareness. Servicely automates service file creation, enforces best practices, and keeps your application logic organized."
 
-  spec.homepage    = "https://github.com/tamiruhailu/servicely"
+  spec.homepage    = "https://github.com/tamiru/servicely"
   spec.license     = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["homepage_uri"]    = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/tamiruhailu/servicely"
-  spec.metadata["changelog_uri"]   = "https://github.com/tamiruhailu/servicely/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/tamiru/servicely"
+  spec.metadata["changelog_uri"]   = "https://github.com/tamiru/servicely/blob/main/CHANGELOG.md"
 
   spec.files         = Dir.chdir(__dir__) { `git ls-files -z`.split("\x0") }
   spec.bindir        = "exe"

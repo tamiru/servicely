@@ -1,0 +1,13 @@
+<% # app/services/<%= @service_dir %>/<%= @file_name %>_service.rb %>
+# frozen_string_literal: true
+
+module <%= @module_nesting %>
+class <%= @class_suffix %>Service
+include Interactor
+
+def call
+# Your logic here
+context
+end
+end
+end

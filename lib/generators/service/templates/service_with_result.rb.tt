@@ -1,0 +1,16 @@
+<% # app/services/<%= @service_dir %>/<%= @file_name %>_service.rb %>
+# frozen_string_literal: true
+
+require "dry/monads"
+
+module <%= @module_nesting %>
+class <%= @class_suffix %>Service < ApplicationService
+include Dry::Monads[:result]
+
+def call
+# Example:
+# validate! or Failure(:invalid_params)
+Success(true)
+end
+end
+end

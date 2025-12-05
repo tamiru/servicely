@@ -1,0 +1,7 @@
+require "test_helper"
+
+class <%= @module_nesting %>::<%= @class_name %>ServiceTest < ActiveSupport::TestCase
+test "works" do
+assert <%= @module_nesting %>::<%= @class_name %>Service.call
+end
+end

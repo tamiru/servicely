@@ -1,0 +1,8 @@
+require "rails_helper"
+
+RSpec.describe <%= @module_nesting %>::<%= @class_name %>Service, type: :service do
+it "works" do
+result = described_class.call
+expect(result).to be_truthy
+end
+end

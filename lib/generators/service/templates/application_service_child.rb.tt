@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+module <%= @module_nesting %>
+class <%= @class_name %>Service < ApplicationService
+def initialize(params = {}, actor: nil, message: nil, ip: nil)
+super(actor: actor, message: message || "#{actor_name} created a user", ip: ip)
+@params = params
+end
+
+private
+
+attr_reader :params
+
+def call
+# Your business logic here
+User.create!(params)
+true
+end
+end
+end

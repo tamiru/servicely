@@ -3,30 +3,29 @@
 require_relative "lib/servicely/version"
 
 Gem::Specification.new do |spec|
-  spec.name        = "servicely"
-  spec.version     = Servicely::VERSION
-  spec.authors     = ["Tamiru Hailu"]
-  spec.email       = ["tamiruhailu@gmail.com"]
+  spec.name          = "servicely"
+  spec.version       = Servicely::VERSION
+  spec.authors       = ["Tamiru Hailu"]
+  spec.email         = ["tamiruhailu@gmail.com"]
 
-  spec.summary     = "A Rails generator that creates clean, structured Service Objects for Rails apps and engines."
-  spec.description = "Servicely provides a simple, consistent Service Object generator for Ruby on Rails applications and Rails Engines. It helps developers create maintainable service classes with a clean structure, namespacing support, and engine-awareness. Servicely automates service file creation, enforces best practices, and keeps your application logic organized."
+  spec.summary       = "Clean service object generator for Rails 5+ & engines"
+  spec.description   = "Generates namespaced service objects like app/services/users/create_service.rb with ApplicationService base class. Works perfectly in Rails apps and engines."
 
-  spec.homepage    = "https://github.com/tamiru/servicely"
-  spec.license     = "MIT"
-  spec.required_ruby_version = ">= 3.1.0"
+  spec.homepage      = "https://github.com/tamiru/servicely"
+  spec.license       = "MIT"
+  spec.required_ruby_version = ">= 2.7.0"
 
-  spec.metadata["homepage_uri"]    = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/tamiru/servicely"
-  spec.metadata["changelog_uri"]   = "https://github.com/tamiru/servicely/blob/main/CHANGELOG.md"
+  spec.metadata = {
+    "homepage_uri"      => spec.homepage,
+    "source_code_uri"   => "#{spec.homepage}/tree/v#{spec.version}",
+    "changelog_uri"     => "#{spec.homepage}/blob/main/CHANGELOG.md",
+    "rubygems_mfa_required" => "true"
+  }
 
-  spec.files         = Dir.chdir(__dir__) { `git ls-files -z`.split("\x0") }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.files = Dir.chdir(__dir__) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|\.git)/}) }
+  end
+
   spec.require_paths = ["lib"]
-
-  # Uncomment to register a new dependency of your gem
-  # spec.add_dependency "example-gem", "~> 1.0"
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_dependency "rails", ">= 5.0.0"
 end

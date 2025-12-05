@@ -1,0 +1,96 @@
+# frozen_string_literal: true
+
+# Advanced ApplicationService with automatic Telegram notifications
+class ApplicationService
+# Main entry point — supports actor, custom message, IP, etc.
+def self.call(*args, actor: nil, message: nil, ip: nil, **kwargs, &block)
+new(*args, actor: actor, message: message, ip: ip, **kwargs, &block).tap do |service|
+service.send(:notify_telegram)
+end.call
+end
+
+# Bang version — raises on error
+def self.call!(*args, **kwargs)
+result = call(*args, **kwargs)
+if result.respond_to?(:failure?) && result.failure?
+raise result.failure.is_a?(Exception) ? result.failure : StandardError, result.failure.to_s
+end
+result
+end
+
+attr_reader :actor, :message, :ip, :started_at
+
+def initialize(*args, actor: nil, message: nil, ip: nil, **kwargs)
+@actor      = actor
+@message    = message || default_message
+@ip         = ip || "unknown"
+@started_at = Time.current
+@args       = args
+@kwargs     = kwargs
+end
+
+private
+
+# Override in child services for custom messages
+def default_message
+"#{self.class.name.split('::').last} executed by #{actor_name}"
+end
+
+def actor_name
+return "Anonymous" unless actor.respond_to?(:to_s)
+actor.respond_to?(:email) ? actor.email : actor.to_s
+end
+
+def notify_telegram
+Thread.new do
+begin
+result = call
+send_telegram("Success: #{message}", success: true)
+rescue => e
+error_msg = "#{message}\nError: #{e.message}"
+send_telegram("Failed: #{error_msg}", success: false)
+raise e
+end
+end.join
+end
+
+def send_telegram(text, success: true)
+return unless telegram_configured?
+
+emoji = success ? "Success" : "Failed"
+env   = Rails.env.production? ? "" : " [#{Rails.env.upcase}]"
+
+full_message = <<~MSG
+#{emoji} *Service Alert#{env}*
+Action: #{text}
+User: #{actor_name}
+IP: #{ip}
+Time: #{Time.current.strftime("%Y-%m-%d %H:%M:%S %Z")}
+Service: #{self.class.name}
+MSG
+
+uri = URI("https://api.telegram.org/bot#{telegram_token}/sendMessage")
+Net::HTTP.post_form(uri, {
+chat_id: telegram_chat_id,
+text: full_message.strip,
+parse_mode: "Markdown"
+})
+rescue => e
+Rails.logger.warn "Telegram failed: #{e.message}"
+end
+
+def telegram_configured?
+telegram_token.present? && telegram_chat_id.present?
+end
+
+def telegram_token
+ENV["TELEGRAM_BOT_TOKEN"] || Rails.application.credentials.dig(:telegram, :bot_token)
+end
+
+def telegram_chat_id
+ENV["TELEGRAM_CHAT_ID"] || Rails.application.credentials.dig(:telegram, :chat_id)
+end
+
+# Prevent direct instantiation
+private_class_method :new
+end

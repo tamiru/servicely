@@ -9,7 +9,7 @@ class ServiceGenerator < Rails::Generators::NamedBase
 
   class_option :result,     type: :boolean, default: false
   class_option :interactor, type: :boolean, default: false
-  class_option :scope, type: :string,  default: nil
+  class_option :scope, kit     type: :string,  default: nil
 
   def create_files
     create_application_service
